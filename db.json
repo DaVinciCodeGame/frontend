@@ -1,0 +1,25 @@
+{
+  "ranking": [
+    {
+      "username": "홍길동",
+      "imageUrl": "",
+      "score": 33221,
+      "ranking": 13,
+      "change": 2332,
+      "rank": 2
+    }
+  ],
+  "rooms": {
+    "maxPage": 10,
+    "rooms": [
+      {
+        "currentMembers": 3,
+        "maxMembers": 4,
+        "isWaiting": true,
+        "roomId": 1232,
+        "roomName": "초보자는 환영한다",
+        "isPrivate": true
+      }
+    ]
+  }
+}

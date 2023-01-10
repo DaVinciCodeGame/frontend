@@ -1,9 +1,29 @@
-import React from 'react'
+import React from "react";
+import styled from "styled-components";
+import LobbyHeader from "../../components/common/elements/LobbyHeader";
+import Ranking from "./elements/Ranking";
+import RoomList from "./elements/RoomList";
 
 const Lobby = () => {
   return (
-    <div>Lobby</div>
-  )
-}
+    <>
+      <LobbyFrame>
+        <LobbyHeader />
+        <Ranking />
+        <RoomList />
+        <div></div>
+      </LobbyFrame>
+    </>
+  );
+};
 
-export default Lobby
+const LobbyFrame = styled.div`
+  width: 1536px;
+  height: 864px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* background-color: beige; */
+  border: 1px solid black;
+`;
+export default Lobby;
