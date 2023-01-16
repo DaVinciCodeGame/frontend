@@ -1,133 +1,139 @@
 import React from "react";
 import styled from "styled-components";
+import Dropdown from "../../../components/common/elements/DropDown";
 import RoomContents from "./roomListDetail/RoomContents";
+import { useState } from "react";
+import ModalCreateRoom from "../../../components/form/modal/ModalCreateRoom";
 
 const RoomList = () => {
+  const [showCreateRoom, setShowCreateRoom] = useState(false);
   return (
-    <RoomWrapper>
-      <RoomHeader>
-        <RoomLists>방 리스트</RoomLists>
-      </RoomHeader>
-      <RoomFunc>
-        <OpenRoom>
-          <input type="checkbox" id="standby" />
-          <label htmlFor="standby"> 대기</label>
-        </OpenRoom>
-        <PrivateRoom>
-          <input type="checkbox" id="privacyControl" />
-          <label htmlFor="privacyControl"> 비공개</label>
-        </PrivateRoom>
-        <SearchRoomBar>
-          <SearchBarStyle type="text" placeholder="Search.." />
-        </SearchRoomBar>
-        <RefreshBtn type="submit">새로고침</RefreshBtn>
-      </RoomFunc>
+    <StRoomWrapper>
+      <StRoomHeader>
+        <StRoomLists>방 리스트</StRoomLists>
+      </StRoomHeader>
+      <StRoomFunc>
+        <StFuncFront>
+          <StOpenRoom>
+            <input type="checkbox" id="standby" />
+            <label htmlFor="standby"> 대기</label>
+          </StOpenRoom>
+          <StPrivateRoom>
+            <input type="checkbox" id="privacyControl" />
+            <label htmlFor="privacyControl"> 비공개</label>
+          </StPrivateRoom>
+        </StFuncFront>
+        <StFuncBack>
+          <Dropdown />
+          <StSearchBarStyle type="text" placeholder="Search.." />
+          <StRefreshBtn type="submit">새로고침</StRefreshBtn>
+        </StFuncBack>
+      </StRoomFunc>
       <RoomContents></RoomContents>
-      <BotButtons>
-        <CreateRoomBtn>방 만들기</CreateRoomBtn>
-        <InstantStart>바로시작</InstantStart>
-      </BotButtons>
-    </RoomWrapper>
+      <StBotButtons>
+        <StCreateRoomBtn onClick={() => setShowCreateRoom(true)}>
+          방 만들기
+        </StCreateRoomBtn>
+        {showCreateRoom && (
+          <ModalCreateRoom
+            modal
+            closeModal={() => {
+              setShowCreateRoom(!showCreateRoom); // <- 이거를 내려받음 누구요
+            }}
+          ></ModalCreateRoom>
+        )}
+        <StInstantStart>바로시작</StInstantStart>
+      </StBotButtons>
+    </StRoomWrapper>
   );
 };
 
-const RoomWrapper = styled.div`
+const StRoomWrapper = styled.div`
   box-sizing: border-box;
-
-  position: absolute;
   width: 650px;
   height: 766px;
-  left: 658px;
-  top: 68px;
-  z-index: 20;
-
   border: 1px solid black;
   border-radius: 12px;
 `;
 
-const RoomHeader = styled.div`
+const StRoomHeader = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   width: 650px;
   height: 40px;
-  left: 650px;
-  top: 68px;
   background: #333333;
   border-radius: 12px 12px 0px 0px;
 `;
 
-const RoomLists = styled.p`
+const StRoomLists = styled.p`
   font-size: 20px;
   color: white;
 `;
+//room func
+const StRoomFunc = styled.div`
+  display: flex;
+  justify-content: space-around;
+  flex-direction: row;
+  align-items: center;
 
-const RoomFunc = styled.div`
-  width: 650px;
   height: 58px;
-  left: 658px;
+`;
+const StFuncFront = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
 `;
 
-const OpenRoom = styled.div`
-  position: relative;
+const StOpenRoom = styled.div`
   width: 70px;
   height: 26px;
-  left: 20px;
-  top: 20px;
   padding: 4px;
   border: 1px solid black;
   border-radius: 4px;
 `;
-const PrivateRoom = styled.div`
-  position: relative;
+const StPrivateRoom = styled.div`
   width: 80px;
   height: 26px;
-  left: 100px;
-  top: -6px;
   padding: 4px;
   border: 1px solid black;
   border-radius: 4px;
 `;
-const SearchRoomBar = styled.div`
-  position: relative;
-  top: -35px;
-  left: 60px;
+const StFuncBack = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
 `;
-const SearchBarStyle = styled.input`
-  width: 300px;
+
+const StSearchBarStyle = styled.input`
+  width: 200px;
   height: 34px;
 `;
-const RefreshBtn = styled.button`
-  position: relative;
-  top: -70px;
-  left: 260px;
-  padding: 6px;
+const StRefreshBtn = styled.button`
+  width: 82px;
+  height: 32px;
   border-radius: 4px;
 `;
-
-const BotButtons = styled.div`
-  position: relative;
-  width: 100%;
-  top: 8px;
+// ends
+const StBotButtons = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  height: 88px;
   border-top: 1px solid black;
+  gap: 10px;
 `;
 
-const CreateRoomBtn = styled.button`
-  position: relative;
+const StCreateRoomBtn = styled.button`
   width: 130px;
   height: 44px;
-  top: 20px;
-  left: 150px;
-  opacity: 0.4;
   border: 1px solid #222222;
   border-radius: 6px;
+  opacity: 0.4;
 `;
-const InstantStart = styled.button`
-  position: relative;
+const StInstantStart = styled.button`
   width: 130px;
   height: 44px;
-  top: 20px;
-  left: 160px;
   border-radius: 6px;
   background: #222222;
   color: white;

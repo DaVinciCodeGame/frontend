@@ -2,7 +2,15 @@ import React from "react";
 import ReactDOM from "react-dom";
 import styled from "styled-components";
 
-const Modal = ({ children, modal, closeModal }) => {
+const ModalProfile = ({ children, modal, closeModal }) => {
+  // 얘는
+  /*
+  Modal 사용법
+  <Modal /> 컴포넌트를 사용할 때 props를 반드시 내려주세요
+  props :: chidren(안에 넣을 애들), modal(이게 있어야 display가 none이 아닙니다 closeModal = 닫기 함수입니다)
+  끗
+  */
+
   const styles = { modal };
   return (
     <>
@@ -17,19 +25,19 @@ const Modal = ({ children, modal, closeModal }) => {
   );
 };
 
-export default Modal;
+export default ModalProfile;
 
 const StModal = styled.div`
-  position: absolute;
-  top: 50%;
-  left: 50%;
+  position: fixed;
+  top: 25%;
+  left: 35%;
   z-index: 140;
   transform: translate(-50%, -50%);
   display: ${({ modal }) => {
     return modal ? "flex" : "none";
   }};
   width: 400px;
-  height: 500px;
+  height: 336px;
   background-color: white;
   flex-direction: column;
   justify-content: center;

@@ -7,23 +7,28 @@ import RoomList from "./elements/RoomList";
 const Lobby = () => {
   return (
     <>
-      <LobbyFrame>
+      <StLobbyFrame>
         <LobbyHeader />
-        <Ranking />
-        <RoomList />
-        <div></div>
-      </LobbyFrame>
+        <StDiv>
+          <Ranking />
+          <RoomList />
+        </StDiv>
+      </StLobbyFrame>
     </>
   );
 };
 
-const LobbyFrame = styled.div`
+const StLobbyFrame = styled.div`
   width: 1536px;
   height: 864px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  /* background-color: beige; */
   border: 1px solid black;
+`;
+
+const StDiv = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  margin-top: 24px;
 `;
 export default Lobby;
