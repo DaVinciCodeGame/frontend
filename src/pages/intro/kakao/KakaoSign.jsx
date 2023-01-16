@@ -16,11 +16,11 @@ const KakaoSign = () => {
   const kakaoLoginFn = async()=>{
     const res = await SignAPI.kakaoSign(code)
     switch(res.status){
-      case 200 : 
+      case 201 : 
         navigate('/profile')
         break
       default : 
-        navigate('/')
+        navigate('/await')
         break
     }
   }

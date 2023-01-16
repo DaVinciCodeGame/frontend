@@ -16,7 +16,7 @@ const Header = () => {
           <RoomName>초보자 환영! 같이 즐기면서 배워요</RoomName>
         </NavbarStatus>
         <ReportButton>
-          <span class="material-symbols-outlined">sms_failed</span>버그신고
+          <span className="material-symbols-outlined">sms_failed</span>버그신고
         </ReportButton>
       </NavbarInside>
     </Navbar>

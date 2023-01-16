@@ -1,69 +1,61 @@
 import React, { useEffect, useRef, useState } from "react";
-import { io } from "socket.io-client";
-import styled, { withTheme } from "styled-components";
+import styled from "styled-components";
 import Header from "../../components/common/elements/Header";
+import Video from "../../components/form/video/Video";
+import Card from "./ele/Card";
+import Peer from "simple-peer";
+import { socketId } from "../../helpers/socket";
 
-const socket = io.connect("http://localhost:3002/");
 
-const Game = () => {
-  const createdAt = new Date().toLocaleString();
-
-  const room = 3;
-  const [msg, setMsg] = useState("");
-  const [msgList, setMsgList] = useState([]);
-
-  // https://sparta-yes.shop/
-
-  const addMyCard = (data) => {
-    console.log(data);
-  };
-
-  // 4인 ===> [{ userId: 3, card:[{color:white, value:1},{color:white}] },{ userId: 4, black: 1  }].length -> 4
-
-  const users = [{ userId: 1 }, { userId: 3 }, { userId: 19 }, { userId: 33 }];
-
-  // socket.on("asdfsd", (data) => {
-  //   const a = [].findIndex((el) => el.userId === socket.id);
-  //   // 0번인덱스에 내가들어간다
-  //   // 내 뒤에있는놈들을 순서대로 넣는다
-
-  //   // data.map((el) => {});
-  // });
-
-  const onClick = () => {
-    socket.emit("selectFirstCard", { userId: +msg }, { black: 2 }, addMyCard);
-  };
-
-  const addMyMessage = (msg) => {
-    const myMsg = { msg, mine: true, createdAt };
-    // setMsgList((prev) => [...prev, myMsg]);
-    // setMsg("");
-    console.log("보낸사람한테만", myMsg);
-  };
-
-  const sendMsg = () => {
-    socket.emit("send_message", { msg, room }, addMyMessage);
-  };
-
+const Game = ({peers}) => {
+    const userVideo = useRef();
   useEffect(() => {
-    socket.emit("join_room", room);
-
-    socket.on("allUsersFirstCard", (data) => {
-      console.log("순스ㅓ는 ", data);
-    });
-
-    socket.on("aa", (data) => {
-      console.log("누군가들어왔다 ", data);
-    });
-
-    socket.on("send_message", (msg) => {
-      // const myMsg = { msg, mine: false, createdAt };
-      console.log("나머지사람한테만");
-      // setMsgList((prev) => [...prev, myMsg]);
-      // console.log("리시브메세지안에있는", msgList);
-    });
-  }, [socket]);
-
+    navigator.mediaDevices
+      .getUserMedia({ video: {  width:' 354.82px',height: '231.89px'}, audio: true })
+      .then((stream) => {
+        userVideo.current.srcObject = stream;
+      })
+    }, [])
+  const roomData = [
+    {
+      userId: 4,
+      gameSids: "12D73jwD0ioJeJLGAAAD",
+      cards: [
+        { color: "white", value: 1 },
+        { color: "white", value: null },
+        { color: "white", value: 3 },
+      ],
+    },
+    {
+      userId: 1,
+      gameSids: "12D73jwD0ioJeJLGAAAD",
+      cards: [
+        { color: "black", value: null },
+        { color: "black", value: 2 },
+        { color: "black", value: null },
+      ],
+    },
+    {
+      userId: 2,
+      gameSids: "12D73jwD0ioJeJLGAAAD",
+      cards: [
+        { color: "black", value: null },
+        { color: "black", value: null },
+        { color: "black", value: 6 },
+      ],
+    },
+    {
+      userId: 3,
+      gameSids: "12D73jwD0ioJeJLGAAAD",
+      cards: [
+        { color: "white", value: 4 },
+        { color: "white", value: 5 },
+        { color: "white", value: null },
+        { color: "white", value: null },
+      ],
+    },
+  ]
+  console.log(peers[0])
   return (
     <>
       <Header />
@@ -71,38 +63,41 @@ const Game = () => {
         <OtherUsers>
           <OtherUser>
             <UserInfo>
-              <Camera></Camera>
+              {peers[0]?
+               <Video peer={peers[0]} game={true}/>:
+               <Camera></Camera>
+              }
               <SelectBtn>선택</SelectBtn>
             </UserInfo>
             <NickName>참여자2</NickName>
             <CardArea>
-              <Card />
-              <Card />
-              <Card backgroundColor="white" />
+              {roomData[1]?.cards.map((el,i)=><Card key={`candidate1${i}`} card={el}/>)}
             </CardArea>
           </OtherUser>
           <OtherUser>
             <UserInfo>
-              <Camera></Camera>
+              {/* {peers[1]?
+               <Video peer={peers[1]} game={true}/>:
+               <Camera></Camera>
+              } */}
               <SelectBtn>선택</SelectBtn>
             </UserInfo>
             <NickName>참여자2</NickName>
             <CardArea>
-              <Card />
-              <Card backgroundColor="white" />
-              <Card />
+              {roomData[2]?.cards.map((el,i)=><Card key={`candidate1${i}`} card={el}/>)}
             </CardArea>
           </OtherUser>
           <OtherUser>
             <UserInfo>
-              <Camera></Camera>
+              {/* {peers[2]?
+               <Video peer={peers[3]} game={true}/>:
+               <Camera></Camera>
+              } */}
               <SelectBtn>선택</SelectBtn>
             </UserInfo>
             <NickName>참여자2</NickName>
             <CardArea>
-              <Card />
-              <Card backgroundColor="white" />
-              <Card backgroundColor="white" />
+              {roomData[2]?.cards.map((el,i)=><Card key={`candidate1${i}`} card={el}/>)}
             </CardArea>
           </OtherUser>
         </OtherUsers>
@@ -111,18 +106,20 @@ const Game = () => {
           <OnGoingStatus>참여자1이 진행중입니다.</OnGoingStatus>
           <MiddleField>
             <GameText>가져올 타일을 선택 해주세요!</GameText>
-            <StBox></StBox>
+            <StBox>
+            </StBox>
           </MiddleField>
         </CardBox>
         <Footer>
           <Left>
-            <Camera></Camera>
+            <StyledVideo muted ref={userVideo} autoPlay playsInline />
+              {roomData[0]?.cards.map((el,i)=><Card key={`candidate1${i}`} card={el}/>)}
             <BtnList>
-              <button class="material-symbols-outlined">mic</button>
+              <button className="material-symbols-outlined">mic</button>
               <div>|</div>
-              <button class="material-symbols-outlined">videocam_off</button>
+              <button className="material-symbols-outlined">videocam_off</button>
               <div>|</div>
-              <button class="material-symbols-outlined">
+              <button className="material-symbols-outlined">
                 video_camera_front
               </button>
             </BtnList>
@@ -148,8 +145,6 @@ const Game = () => {
     </>
   );
 };
-
-/////////////네브바
 
 const Container = styled.div`
   width: 1080px;
@@ -185,6 +180,12 @@ const Camera = styled.div`
   height: 107px;
   border: 1px solid green;
 `;
+const StyledVideo = styled.video`
+  object-fit: cover;
+  width: 180px;
+  height: 120px;
+  border-radius: 6px;
+`;
 
 const SelectBtn = styled.button`
   border: 1px solid #888888;
@@ -217,14 +218,6 @@ const CardArea = styled.div`
   height: 34px;
   gap: 4px;
   display: flex;
-`;
-
-const Card = styled.div`
-  width: 25px;
-  height: 100%;
-  background-color: ${(props) => props.backgroundColor || "#515151"};
-  color: ${(props) => props.color || "white"};
-  border: 1px solid #c5c5c5;
 `;
 
 /////////// 유저들 칸

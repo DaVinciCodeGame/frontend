@@ -34,27 +34,25 @@ const SetUserInfo = () => {
     },
     onError : (error)=>{
       alert('프로필 수정이 정상적으로 되지 않았습니다. 우측 상단 배너에서 프로필을 다시한번 설정해주세요.')
-      navigate('/lobby')
+      navigate('/await')
     },
   })
   
 
   const onChangeImgHandler = (e) => {
-    const imgSrc = e.target.files[0];
     const file = imgRef.current.files[0];
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onloadend = () => {
       setNewProfileImg(reader.result);
     };
-    if(imgSrc) setNewProfileImg(imgSrc)
   };
 
   const onSubmitHandler = (e)=>{
     e.preventDefault()
     const formData = new FormData()
-    formData.append('username', newNick)
-    formData.append('image', newProfileImg)
+    if(newNick) formData.append('username', newNick)
+    if(newProfileImg) formData.append('image', imgRef.current.files[0]||null)
     mutate(formData)
   }
 

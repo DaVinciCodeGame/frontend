@@ -1,14 +1,18 @@
+import { useQueryClient } from '@tanstack/react-query';
 import React, { useEffect, useRef, useState } from 'react'
-import io from 'socket.io-client'
 import styled from 'styled-components';
+import { queryKeys } from '../../../helpers/queryKeys';
+import { socketId } from '../../../helpers/socket';
 import Message from './Message';
 
-const Chat = () => { // const {room} = useParams()
-  const room =3
-  const userID = 1
+const Chat = () => { //{room}
   const [msg, setMsg] = useState('')
   const [msgList, setMsgList] = useState([])
   const socket = useRef();
+  const queryClient = useQueryClient()
+  const room =3
+  const userID =4
+  // const userID = queryClient.setQueryData([queryKeys.MYINFO])
 
   const createdAt = new Date().toLocaleString()
 
@@ -29,7 +33,7 @@ const Chat = () => { // const {room} = useParams()
   };
 
   useEffect(()=>{
-    socket.current = io.connect(process.env.REACT_APP_SERVER);
+    socket.current = socketId;
     socket.current.emit('join_room', room, userID)
     socket.current.emit("redisTest", 'hi', '예성님 안녕');
     //  socket.emit("nickname", nickName) // 카카오 닉네임으로 소켓 설정하기
